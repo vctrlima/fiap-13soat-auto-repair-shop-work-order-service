@@ -1,0 +1,113 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model WorkOrder {
+  id        String   @id @default(uuid()) @db.Uuid
+  customerId String  @map("customer_id") @db.Uuid
+  vehicleId  String  @map("vehicle_id") @db.Uuid
+  status     Status  @default(RECEIVED)
+  budget     Float   @default(0)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime? @updatedAt @map("updated_at")
+
+  services       WorkOrderOnService[]
+  partsAndSupplies WorkOrderOnPartOrSupply[]
+
+  @@map("work_orders")
+}
+
+model Service {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @db.VarChar(255)
+  description String?  @db.Text
+  price       Float
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime? @updatedAt @map("updated_at")
+
+  workOrders WorkOrderOnService[]
+
+  @@map("services")
+}
+
+model PartOrSupply {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @db.VarChar(255)
+  description String?  @db.Text
+  price       Float
+  inStock     Int      @default(0) @map("in_stock")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime? @updatedAt @map("updated_at")
+
+  workOrders WorkOrderOnPartOrSupply[]
+
+  @@map("parts_or_supplies")
+}
+
+model WorkOrderOnService {
+  id           String   @id @default(uuid()) @db.Uuid
+  workOrderId  String   @map("work_order_id") @db.Uuid
+  serviceId    String   @map("service_id") @db.Uuid
+  quantity     Int      @default(1)
+
+  workOrder WorkOrder @relation(fields: [workOrderId], references: [id], onDelete: Cascade)
+  service   Service   @relation(fields: [serviceId], references: [id])
+
+  @@unique([workOrderId, serviceId])
+  @@map("work_order_services")
+}
+
+model WorkOrderOnPartOrSupply {
+  id              String @id @default(uuid()) @db.Uuid
+  workOrderId     String @map("work_order_id") @db.Uuid
+  partOrSupplyId  String @map("part_or_supply_id") @db.Uuid
+  quantity        Int    @default(1)
+
+  workOrder    WorkOrder    @relation(fields: [workOrderId], references: [id], onDelete: Cascade)
+  partOrSupply PartOrSupply @relation(fields: [partOrSupplyId], references: [id])
+
+  @@unique([workOrderId, partOrSupplyId])
+  @@map("work_order_parts_or_supplies")
+}
+
+model SagaState {
+  id                    String   @id @default(uuid()) @db.Uuid
+  workOrderId           String   @unique @map("work_order_id") @db.Uuid
+  status                SagaStatus @default(SAGA_STARTED)
+  currentStep           String   @default("INITIATED") @map("current_step") @db.VarChar(100)
+  compensationHistory   Json     @default("[]") @map("compensation_history")
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime? @updatedAt @map("updated_at")
+
+  @@map("saga_states")
+}
+
+enum Status {
+  RECEIVED
+  IN_DIAGNOSIS
+  WAITING_APPROVAL
+  APPROVED
+  IN_EXECUTION
+  FINISHED
+  DELIVERED
+  CANCELED
+}
+
+enum SagaStatus {
+  SAGA_STARTED
+  PAYMENT_PENDING
+  PAYMENT_COMPLETED
+  PAYMENT_FAILED
+  EXECUTION_PENDING
+  EXECUTION_COMPLETED
+  EXECUTION_FAILED
+  REFUND_PENDING
+  SAGA_COMPENSATING
+  SAGA_COMPENSATED
+  SAGA_COMPLETED
+}

@@ -1,0 +1,104 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: work-order-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: work_order_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  ministack:
+    image: nahuelnucera/ministack:latest
+    container_name: ministack
+    environment:
+      MINISTACK_REGION: us-east-2
+      MINISTACK_ACCOUNT_ID: "000000000000"
+      PERSIST_STATE: "0"
+      LOG_LEVEL: INFO
+    ports:
+      - "4566:4566"
+    volumes:
+      - ./docker-entrypoint-initaws.d:/docker-entrypoint-initaws.d:ro
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: work-order-service
+    ports:
+      - "3002:3002"
+    environment:
+      DATABASE_URL: postgresql://postgres:admin@postgres:5433/work_order_db?schema=public
+      SERVER_HOST: http://localhost:3002
+      SERVER_PORT: 3002
+      CUSTOMER_SERVICE_URL: http://host.docker.internal:3001
+      PASSWORD_HASH_SALT: 10
+      JWT_ACCESS_TOKEN_SECRET: 5b328d283d9a9982596057659c71e3a5
+      JWT_REFRESH_TOKEN_SECRET: 8b4e55de6e8b8401cfd56613f356c7cd
+      NODE_ENV: production
+      OTEL_ENABLED: "true"
+      OTEL_SERVICE_NAME: work-order-service
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
+      AWS_ENDPOINT_URL: http://ministack:4566
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      AWS_REGION: us-east-2
+      SNS_WORK_ORDER_EVENTS_TOPIC_ARN: arn:aws:sns:us-east-2:000000000000:work-order-events
+      SQS_PAYMENT_QUEUE_URL: http://ministack:4566/000000000000/work-order-payment-queue
+      SQS_EXECUTION_QUEUE_URL: http://ministack:4566/000000000000/work-order-execution-queue
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ministack:
+        condition: service_started
+      otel-collector:
+        condition: service_started
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.120.0
+    container_name: otel-collector
+    command: ["--config=/etc/otel-collector/config.yaml"]
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+      - "8889:8889"
+    volumes:
+      - ./monitoring/otel-collector-config.yaml:/etc/otel-collector/config.yaml:ro
+
+  prometheus:
+    image: prom/prometheus:v2.55.1
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yaml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    depends_on:
+      - otel-collector
+
+  grafana:
+    image: grafana/grafana:11.4.0
+    container_name: grafana
+    ports:
+      - "3100:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+
+volumes:
+  pgdata:
+  prometheus-data:
+  grafana-data:
