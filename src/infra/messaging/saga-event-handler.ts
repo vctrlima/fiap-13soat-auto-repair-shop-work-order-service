@@ -14,6 +14,7 @@ import {
   sagaCompensatedCounter,
   workOrderCompletedCounter,
 } from "@/infra/observability";
+import { PrismaClient } from "@prisma/client";
 
 const VALID_TRANSITIONS: Record<string, SagaStatus[]> = {
   PaymentCompleted: [SagaStatus.PaymentPending, SagaStatus.SagaStarted],
@@ -23,19 +24,23 @@ const VALID_TRANSITIONS: Record<string, SagaStatus[]> = {
 };
 
 export class SagaEventHandler {
-  private readonly processedEventIds = new Set<string>();
-
   constructor(
     private readonly updateSagaStep: UpdateSagaStep,
     private readonly updateWorkOrder: UpdateWorkOrder,
     private readonly eventPublisher: EventPublisher,
     private readonly getSagaState?: GetSagaState,
+    private readonly prisma?: PrismaClient,
   ) {}
 
   async handle(event: DomainEvent): Promise<void> {
-    if (this.processedEventIds.has(event.eventId)) {
-      console.warn(`Duplicate event ignored: ${event.eventId}`);
-      return;
+    if (this.prisma) {
+      const existing = await this.prisma.processedEvent.findUnique({
+        where: { eventId: event.eventId },
+      });
+      if (existing) {
+        console.warn(`Duplicate event ignored: ${event.eventId}`);
+        return;
+      }
     }
 
     if (this.getSagaState && event.data?.workOrderId) {
@@ -76,10 +81,10 @@ export class SagaEventHandler {
         console.warn(`Unhandled event type: ${event.eventType}`);
     }
 
-    this.processedEventIds.add(event.eventId);
-    if (this.processedEventIds.size > 10000) {
-      const first = this.processedEventIds.values().next().value;
-      if (first) this.processedEventIds.delete(first);
+    if (this.prisma) {
+      await this.prisma.processedEvent.create({
+        data: { eventId: event.eventId, eventType: event.eventType },
+      });
     }
   }
 

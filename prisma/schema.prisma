@@ -91,6 +91,15 @@ model SagaState {
   @@map("saga_states")
 }
 
+model ProcessedEvent {
+  eventId     String   @id @map("event_id") @db.VarChar(255)
+  eventType   String   @map("event_type") @db.VarChar(100)
+  processedAt DateTime @default(now()) @map("processed_at")
+
+  @@index([processedAt])
+  @@map("processed_events")
+}
+
 enum Status {
   RECEIVED
   IN_DIAGNOSIS

@@ -2,11 +2,14 @@ import "./infra/observability/tracing";
 
 import Fastify from "fastify";
 import { randomUUID } from "node:crypto";
+import prisma from "./infra/db/prisma-client";
 import {
   SagaEventHandler,
   SnsEventPublisher,
   SqsEventConsumer,
 } from "./infra/messaging";
+import { DlqMonitor } from "./infra/messaging/dlq-monitor";
+import { SagaTimeoutJob } from "./infra/messaging/saga-timeout-job";
 import {
   correlationFields,
   getRequestContext,
@@ -81,6 +84,7 @@ const sagaHandler = new SagaEventHandler(
   makeUpdateWorkOrder(),
   eventPublisher,
   makeGetSagaState(),
+  prisma,
 );
 
 const paymentConsumer = new SqsEventConsumer(
@@ -88,12 +92,25 @@ const paymentConsumer = new SqsEventConsumer(
   env.awsRegion,
   (event) => sagaHandler.handle(event),
   env.awsEndpoint,
+  [env.snsPaymentEventsTopicArn],
 );
 
 const executionConsumer = new SqsEventConsumer(
   env.sqsExecutionQueueUrl,
   env.awsRegion,
   (event) => sagaHandler.handle(event),
+  env.awsEndpoint,
+  [env.snsExecutionEventsTopicArn],
+);
+
+const sagaTimeoutJob = new SagaTimeoutJob(prisma);
+
+const dlqMonitor = new DlqMonitor(
+  env.awsRegion,
+  [
+    { name: "payment-dlq", url: env.sqsPaymentDlqUrl },
+    { name: "execution-dlq", url: env.sqsExecutionDlqUrl },
+  ],
   env.awsEndpoint,
 );
 
@@ -109,11 +126,15 @@ server.listen({ port, host }, (error) => {
     executionConsumer
       .start()
       .then(() => console.log("[SQS] Execution consumer started"));
+    sagaTimeoutJob.start();
+    dlqMonitor.start();
   }
 });
 
 const shutdown = async () => {
   console.log("[SHUTDOWN] Stopping consumers...");
+  sagaTimeoutJob.stop();
+  dlqMonitor.stop();
   await paymentConsumer.stop();
   await executionConsumer.stop();
   await server.close();

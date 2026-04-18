@@ -5,13 +5,13 @@ jest.mock("@/infra/observability", () => ({
 
 import { EventPublisher } from "@/application/protocols/messaging";
 import { SagaStatus, Status } from "@/domain/enums";
+import type { EventType } from "@/domain/events/domain-event";
 import {
   GetSagaState,
   UpdateSagaStep,
   UpdateWorkOrder,
 } from "@/domain/use-cases";
 import { SagaEventHandler } from "@/infra/messaging/saga-event-handler";
-import type { EventType } from "@/domain/events/domain-event";
 
 const makeUpdateSagaStep = (): UpdateSagaStep => ({ updateStep: jest.fn() });
 const makeUpdateWorkOrder = (): UpdateWorkOrder => ({ update: jest.fn() });
@@ -153,7 +153,25 @@ describe("SagaEventHandler", () => {
 
   describe("Idempotency", () => {
     it("should ignore duplicate events with same eventId", async () => {
-      const { sut, updateSagaStep } = makeSut();
+      const updateSagaStep = makeUpdateSagaStep();
+      const updateWorkOrder = makeUpdateWorkOrder();
+      const publisher = makePublisher();
+      const mockPrisma = {
+        processedEvent: {
+          findUnique: jest
+            .fn()
+            .mockResolvedValueOnce(null)
+            .mockResolvedValueOnce({ eventId: "evt-1" }),
+          create: jest.fn(),
+        },
+      } as any;
+      const sut = new SagaEventHandler(
+        updateSagaStep,
+        updateWorkOrder,
+        publisher,
+        undefined,
+        mockPrisma,
+      );
       const event = makeEvent("PaymentCompleted", { workOrderId: "wo-1" });
       await sut.handle(event);
       await sut.handle(event);
