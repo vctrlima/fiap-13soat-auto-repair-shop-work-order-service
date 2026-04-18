@@ -1,13 +1,34 @@
-import * as dotenv from 'dotenv';
+import * as dotenv from "dotenv";
+import { z } from "zod";
 
 dotenv.config();
 
+const envSchema = z.object({
+  SERVER_PORT: z.coerce.number().default(3002),
+  SERVER_HOST: z.string().default("http://localhost:3002"),
+  AWS_REGION: z.string().default("us-east-1"),
+  AWS_ENDPOINT: z.string().optional(),
+  SNS_WORK_ORDER_TOPIC_ARN: z
+    .string()
+    .default("arn:aws:sns:us-east-1:000000000000:work-order-events"),
+  SQS_PAYMENT_QUEUE_URL: z
+    .string()
+    .default("http://localhost:4566/000000000000/payment-events-work-order"),
+  SQS_EXECUTION_QUEUE_URL: z
+    .string()
+    .default("http://localhost:4566/000000000000/execution-events-work-order"),
+  CORS_ORIGIN: z.string().optional(),
+});
+
+const parsed = envSchema.parse(process.env);
+
 export default {
-  port: process.env.SERVER_PORT || 3002,
-  host: process.env.SERVER_HOST || 'http://localhost:3002',
-  awsRegion: process.env.AWS_REGION || 'us-east-1',
-  awsEndpoint: process.env.AWS_ENDPOINT || undefined,
-  snsWorkOrderTopicArn: process.env.SNS_WORK_ORDER_TOPIC_ARN || 'arn:aws:sns:us-east-1:000000000000:work-order-events',
-  sqsPaymentQueueUrl: process.env.SQS_PAYMENT_QUEUE_URL || 'http://localhost:4566/000000000000/payment-events-work-order',
-  sqsExecutionQueueUrl: process.env.SQS_EXECUTION_QUEUE_URL || 'http://localhost:4566/000000000000/execution-events-work-order',
+  port: parsed.SERVER_PORT,
+  host: parsed.SERVER_HOST,
+  awsRegion: parsed.AWS_REGION,
+  awsEndpoint: parsed.AWS_ENDPOINT,
+  snsWorkOrderTopicArn: parsed.SNS_WORK_ORDER_TOPIC_ARN,
+  sqsPaymentQueueUrl: parsed.SQS_PAYMENT_QUEUE_URL,
+  sqsExecutionQueueUrl: parsed.SQS_EXECUTION_QUEUE_URL,
+  corsOrigin: parsed.CORS_ORIGIN,
 };

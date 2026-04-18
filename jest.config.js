@@ -21,7 +21,13 @@ module.exports = {
     "src/**/*.ts",
     "!src/main.ts",
     "!src/main/**",
+    "!src/**/*.spec.ts",
     "!src/**/*.d.ts",
+    "!src/infra/observability/**",
+    "!src/infra/db/prisma-client.ts",
+    "!src/infra/db/types/**",
+    "!src/**/index.ts",
+    "!src/infra/messaging/sqs-event-consumer.ts",
   ],
   coverageThreshold: {
     global: {

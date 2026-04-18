@@ -9,7 +9,6 @@ import {
   DeleteWorkOrderRepository,
 } from '@/application/protocols/db';
 import { NotFoundError } from '@/presentation/errors';
-import { Status } from '@/domain/enums';
 import { WorkOrderMapper } from '@/infra/db/mappers';
 
 const workOrderInclude = {

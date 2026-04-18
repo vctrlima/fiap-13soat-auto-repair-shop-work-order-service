@@ -7,8 +7,8 @@ export type WorkOrderRepositoryType = Prisma.WorkOrderGetPayload<{
   };
 }>;
 
-export type ServiceRepositoryType = Prisma.ServiceGetPayload<{}>;
+export type ServiceRepositoryType = Prisma.ServiceGetPayload<Record<string, never>>;
 
-export type PartOrSupplyRepositoryType = Prisma.PartOrSupplyGetPayload<{}>;
+export type PartOrSupplyRepositoryType = Prisma.PartOrSupplyGetPayload<Record<string, never>>;
 
-export type SagaStateRepositoryType = Prisma.SagaStateGetPayload<{}>;
+export type SagaStateRepositoryType = Prisma.SagaStateGetPayload<Record<string, never>>;

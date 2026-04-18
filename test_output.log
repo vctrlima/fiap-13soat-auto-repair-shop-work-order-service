@@ -1,0 +1,992 @@
+PASS @fiap-13soat/work-order-service src/infra/db/mappers/mappers.spec.ts
+PASS @fiap-13soat/work-order-service src/infra/messaging/saga-event-handler.spec.ts
+  ● Console
+
+    console.warn
+      Duplicate event ignored: evt-1
+
+      35 |   async handle(event: DomainEvent): Promise<void> {
+      36 |     if (this.processedEventIds.has(event.eventId)) {
+    > 37 |       console.warn(`Duplicate event ignored: ${event.eventId}`);
+         |               ^
+      38 |       return;
+      39 |     }
+      40 |
+
+      at SagaEventHandler.warn [as handle] (src/infra/messaging/saga-event-handler.ts:37:15)
+      at Object.handle (src/infra/messaging/saga-event-handler.spec.ts:159:17)
+
+PASS @fiap-13soat/work-order-service src/infra/db/repositories/prisma-part-or-supply-repository.spec.ts
+PASS @fiap-13soat/work-order-service src/infra/db/repositories/prisma-saga-state-repository.spec.ts
+PASS @fiap-13soat/work-order-service src/infra/db/repositories/prisma-service-repository.spec.ts
+PASS @fiap-13soat/work-order-service src/application/use-cases/saga/db-update-saga-step.spec.ts
+PASS @fiap-13soat/work-order-service src/infra/db/repositories/prisma-work-order-repository.spec.ts
+PASS @fiap-13soat/work-order-service src/application/use-cases/work-order/db-approve-work-order.spec.ts
+PASS @fiap-13soat/work-order-service src/application/use-cases/work-order/db-cancel-work-order.spec.ts
+PASS @fiap-13soat/work-order-service src/presentation/controllers/part-or-supply/get-all-parts-or-supplies-controller.spec.ts
+  ● Console
+
+    console.error
+      Error: err
+          at Object.<anonymous> (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/src/presentation/controllers/part-or-supply/get-all-parts-or-supplies-controller.spec.ts:42:67)
+          at Promise.finally.completed (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+          at _runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:497:12) {
+        name: 'ServerError'
+      }
+
+      18 |
+      19 | export const serverError = (error: any): HttpResponse => {
+    > 20 |   console.error(new ServerError(error.stack));
+         |           ^
+      21 |   return { statusCode: 500, body: { error: 'Internal server error' } };
+      22 | };
+      23 |
+
+      at error (src/presentation/helpers/http-helper.ts:20:11)
+      at GetAllPartsOrSuppliesController.handle (src/presentation/controllers/part-or-supply/get-all-parts-or-supplies-controller.ts:21:25)
+      at Object.<anonymous> (src/presentation/controllers/part-or-supply/get-all-parts-or-supplies-controller.spec.ts:43:20)
+
+PASS @fiap-13soat/work-order-service src/presentation/controllers/work-order/get-all-work-orders-controller.spec.ts
+  ● Console
+
+    console.error
+      Error: err
+          at Object.<anonymous> (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/src/presentation/controllers/work-order/get-all-work-orders-controller.spec.ts:50:62)
+          at Promise.finally.completed (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+          at _runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:497:12) {
+        name: 'ServerError'
+      }
+
+      18 |
+      19 | export const serverError = (error: any): HttpResponse => {
+    > 20 |   console.error(new ServerError(error.stack));
+         |           ^
+      21 |   return { statusCode: 500, body: { error: 'Internal server error' } };
+      22 | };
+      23 |
+
+      at error (src/presentation/helpers/http-helper.ts:20:11)
+      at GetAllWorkOrdersController.handle (src/presentation/controllers/work-order/get-all-work-orders-controller.ts:24:25)
+      at Object.<anonymous> (src/presentation/controllers/work-order/get-all-work-orders-controller.spec.ts:51:20)
+
+PASS @fiap-13soat/work-order-service src/presentation/controllers/part-or-supply/create-part-or-supply-controller.spec.ts
+  ● Console
+
+    console.error
+      Error: err
+          at Object.<anonymous> (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/src/presentation/controllers/part-or-supply/create-part-or-supply-controller.spec.ts:49:64)
+          at Promise.finally.completed (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+          at _runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:497:12) {
+        name: 'ServerError'
+      }
+
+      18 |
+      19 | export const serverError = (error: any): HttpResponse => {
+    > 20 |   console.error(new ServerError(error.stack));
+         |           ^
+      21 |   return { statusCode: 500, body: { error: 'Internal server error' } };
+      22 | };
+      23 |
+
+      at error (src/presentation/helpers/http-helper.ts:20:11)
+      at CreatePartOrSupplyController.handle (src/presentation/controllers/part-or-supply/create-part-or-supply-controller.ts:19:25)
+      at Object.<anonymous> (src/presentation/controllers/part-or-supply/create-part-or-supply-controller.spec.ts:50:20)
+
+PASS @fiap-13soat/work-order-service src/presentation/controllers/work-order/create-work-order-controller.spec.ts
+  ● Console
+
+    console.error
+      Error: err
+          at Object.<anonymous> (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/src/presentation/controllers/work-order/create-work-order-controller.spec.ts:49:61)
+          at Promise.finally.completed (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+          at _runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:497:12) {
+        name: 'ServerError'
+      }
+
+      18 |
+      19 | export const serverError = (error: any): HttpResponse => {
+    > 20 |   console.error(new ServerError(error.stack));
+         |           ^
+      21 |   return { statusCode: 500, body: { error: 'Internal server error' } };
+      22 | };
+      23 |
+
+      at error (src/presentation/helpers/http-helper.ts:20:11)
+      at CreateWorkOrderController.handle (src/presentation/controllers/work-order/create-work-order-controller.ts:19:25)
+      at Object.<anonymous> (src/presentation/controllers/work-order/create-work-order-controller.spec.ts:50:20)
+
+PASS @fiap-13soat/work-order-service src/presentation/controllers/service/update-service-controller.spec.ts
+  ● Console
+
+    console.error
+      [not found] { name: 'NotFoundError' }
+
+      23 |
+      24 | export const notFound = (error: any): HttpResponse => {
+    > 25 |   console.error(error);
+         |           ^
+      26 |   return { statusCode: 404, body: { error: 'Resource not found' } };
+      27 | };
+      28 |
+
+      at error (src/presentation/helpers/http-helper.ts:25:11)
+      at UpdateServiceController.handle (src/presentation/controllers/service/update-service-controller.ts:18:58)
+      at Object.<anonymous> (src/presentation/controllers/service/update-service-controller.spec.ts:39:20)
+
+    console.error
+      Error: err
+          at Object.<anonymous> (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/src/presentation/controllers/service/update-service-controller.spec.ts:45:59)
+          at Promise.finally.completed (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+          at _runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:497:12) {
+        name: 'ServerError'
+      }
+
+      18 |
+      19 | export const serverError = (error: any): HttpResponse => {
+    > 20 |   console.error(new ServerError(error.stack));
+         |           ^
+      21 |   return { statusCode: 500, body: { error: 'Internal server error' } };
+      22 | };
+      23 |
+
+      at error (src/presentation/helpers/http-helper.ts:20:11)
+      at UpdateServiceController.handle (src/presentation/controllers/service/update-service-controller.ts:19:25)
+      at Object.<anonymous> (src/presentation/controllers/service/update-service-controller.spec.ts:46:20)
+
+PASS @fiap-13soat/work-order-service src/application/use-cases/work-order/db-create-work-order.spec.ts
+PASS @fiap-13soat/work-order-service src/presentation/controllers/part-or-supply/update-part-or-supply-controller.spec.ts
+  ● Console
+
+    console.error
+      [not found] { name: 'NotFoundError' }
+
+      23 |
+      24 | export const notFound = (error: any): HttpResponse => {
+    > 25 |   console.error(error);
+         |           ^
+      26 |   return { statusCode: 404, body: { error: 'Resource not found' } };
+      27 | };
+      28 |
+
+      at error (src/presentation/helpers/http-helper.ts:25:11)
+      at UpdatePartOrSupplyController.handle (src/presentation/controllers/part-or-supply/update-part-or-supply-controller.ts:18:58)
+      at Object.<anonymous> (src/presentation/controllers/part-or-supply/update-part-or-supply-controller.spec.ts:39:20)
+
+    console.error
+      Error: err
+          at Object.<anonymous> (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/src/presentation/controllers/part-or-supply/update-part-or-supply-controller.spec.ts:45:64)
+          at Promise.finally.completed (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+          at _runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:497:12) {
+        name: 'ServerError'
+      }
+
+      18 |
+      19 | export const serverError = (error: any): HttpResponse => {
+    > 20 |   console.error(new ServerError(error.stack));
+         |           ^
+      21 |   return { statusCode: 500, body: { error: 'Internal server error' } };
+      22 | };
+      23 |
+
+      at error (src/presentation/helpers/http-helper.ts:20:11)
+      at UpdatePartOrSupplyController.handle (src/presentation/controllers/part-or-supply/update-part-or-supply-controller.ts:19:25)
+      at Object.<anonymous> (src/presentation/controllers/part-or-supply/update-part-or-supply-controller.spec.ts:46:20)
+
+PASS @fiap-13soat/work-order-service src/presentation/controllers/work-order/update-work-order-controller.spec.ts
+  ● Console
+
+    console.error
+      [not found] { name: 'NotFoundError' }
+
+      23 |
+      24 | export const notFound = (error: any): HttpResponse => {
+    > 25 |   console.error(error);
+         |           ^
+      26 |   return { statusCode: 404, body: { error: 'Resource not found' } };
+      27 | };
+      28 |
+
+      at error (src/presentation/helpers/http-helper.ts:25:11)
+      at UpdateWorkOrderController.handle (src/presentation/controllers/work-order/update-work-order-controller.ts:18:58)
+      at Object.<anonymous> (src/presentation/controllers/work-order/update-work-order-controller.spec.ts:39:20)
+
+    console.error
+      Error: err
+          at Object.<anonymous> (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/src/presentation/controllers/work-order/update-work-order-controller.spec.ts:45:61)
+          at Promise.finally.completed (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+          at _runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:497:12) {
+        name: 'ServerError'
+      }
+
+      18 |
+      19 | export const serverError = (error: any): HttpResponse => {
+    > 20 |   console.error(new ServerError(error.stack));
+         |           ^
+      21 |   return { statusCode: 500, body: { error: 'Internal server error' } };
+      22 | };
+      23 |
+
+      at error (src/presentation/helpers/http-helper.ts:20:11)
+      at UpdateWorkOrderController.handle (src/presentation/controllers/work-order/update-work-order-controller.ts:19:25)
+      at Object.<anonymous> (src/presentation/controllers/work-order/update-work-order-controller.spec.ts:46:20)
+
+PASS @fiap-13soat/work-order-service src/application/use-cases/saga/db-start-saga.spec.ts
+PASS @fiap-13soat/work-order-service src/presentation/controllers/part-or-supply/get-part-or-supply-by-id-controller.spec.ts
+  ● Console
+
+    console.error
+      [not found] { name: 'NotFoundError' }
+
+      23 |
+      24 | export const notFound = (error: any): HttpResponse => {
+    > 25 |   console.error(error);
+         |           ^
+      26 |   return { statusCode: 404, body: { error: 'Resource not found' } };
+      27 | };
+      28 |
+
+      at error (src/presentation/helpers/http-helper.ts:25:11)
+      at GetPartOrSupplyByIdController.handle (src/presentation/controllers/part-or-supply/get-part-or-supply-by-id-controller.ts:16:58)
+      at Object.<anonymous> (src/presentation/controllers/part-or-supply/get-part-or-supply-by-id-controller.spec.ts:32:20)
+
+    console.error
+      Error: err
+          at Object.<anonymous> (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/src/presentation/controllers/part-or-supply/get-part-or-supply-by-id-controller.spec.ts:38:66)
+          at Promise.finally.completed (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+          at _runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:497:12) {
+        name: 'ServerError'
+      }
+
+      18 |
+      19 | export const serverError = (error: any): HttpResponse => {
+    > 20 |   console.error(new ServerError(error.stack));
+         |           ^
+      21 |   return { statusCode: 500, body: { error: 'Internal server error' } };
+      22 | };
+      23 |
+
+      at error (src/presentation/helpers/http-helper.ts:20:11)
+      at GetPartOrSupplyByIdController.handle (src/presentation/controllers/part-or-supply/get-part-or-supply-by-id-controller.ts:17:25)
+      at Object.<anonymous> (src/presentation/controllers/part-or-supply/get-part-or-supply-by-id-controller.spec.ts:39:20)
+
+PASS @fiap-13soat/work-order-service src/presentation/controllers/work-order/approve-work-order-controller.spec.ts
+  ● Console
+
+    console.error
+      [WorkOrder] { name: 'NotFoundError' }
+
+      23 |
+      24 | export const notFound = (error: any): HttpResponse => {
+    > 25 |   console.error(error);
+         |           ^
+      26 |   return { statusCode: 404, body: { error: 'Resource not found' } };
+      27 | };
+      28 |
+
+      at error (src/presentation/helpers/http-helper.ts:25:11)
+      at ApproveWorkOrderController.handle (src/presentation/controllers/work-order/approve-work-order-controller.ts:16:58)
+      at Object.<anonymous> (src/presentation/controllers/work-order/approve-work-order-controller.spec.ts:32:20)
+
+    console.error
+      Error: err
+          at Object.<anonymous> (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/src/presentation/controllers/work-order/approve-work-order-controller.spec.ts:38:63)
+          at Promise.finally.completed (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+          at _runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:497:12) {
+        name: 'ServerError'
+      }
+
+      18 |
+      19 | export const serverError = (error: any): HttpResponse => {
+    > 20 |   console.error(new ServerError(error.stack));
+         |           ^
+      21 |   return { statusCode: 500, body: { error: 'Internal server error' } };
+      22 | };
+      23 |
+
+      at error (src/presentation/helpers/http-helper.ts:20:11)
+      at ApproveWorkOrderController.handle (src/presentation/controllers/work-order/approve-work-order-controller.ts:17:25)
+      at Object.<anonymous> (src/presentation/controllers/work-order/approve-work-order-controller.spec.ts:39:20)
+
+PASS @fiap-13soat/work-order-service src/presentation/controllers/service/create-service-controller.spec.ts
+  ● Console
+
+    console.error
+      Error: err
+          at Object.<anonymous> (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/src/presentation/controllers/service/create-service-controller.spec.ts:43:59)
+          at Promise.finally.completed (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+          at _runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:497:12) {
+        name: 'ServerError'
+      }
+
+      18 |
+      19 | export const serverError = (error: any): HttpResponse => {
+    > 20 |   console.error(new ServerError(error.stack));
+         |           ^
+      21 |   return { statusCode: 500, body: { error: 'Internal server error' } };
+      22 | };
+      23 |
+
+      at error (src/presentation/helpers/http-helper.ts:20:11)
+      at CreateServiceController.handle (src/presentation/controllers/service/create-service-controller.ts:18:25)
+      at Object.<anonymous> (src/presentation/controllers/service/create-service-controller.spec.ts:44:20)
+
+PASS @fiap-13soat/work-order-service src/presentation/controllers/work-order/get-work-order-by-id-controller.spec.ts
+  ● Console
+
+    console.error
+      [WorkOrder] { name: 'NotFoundError' }
+
+      23 |
+      24 | export const notFound = (error: any): HttpResponse => {
+    > 25 |   console.error(error);
+         |           ^
+      26 |   return { statusCode: 404, body: { error: 'Resource not found' } };
+      27 | };
+      28 |
+
+      at error (src/presentation/helpers/http-helper.ts:25:11)
+      at GetWorkOrderByIdController.handle (src/presentation/controllers/work-order/get-work-order-by-id-controller.ts:16:58)
+      at Object.<anonymous> (src/presentation/controllers/work-order/get-work-order-by-id-controller.spec.ts:31:20)
+
+    console.error
+      Error: err
+          at Object.<anonymous> (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/src/presentation/controllers/work-order/get-work-order-by-id-controller.spec.ts:37:63)
+          at Promise.finally.completed (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+          at _runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:497:12) {
+        name: 'ServerError'
+      }
+
+      18 |
+      19 | export const serverError = (error: any): HttpResponse => {
+    > 20 |   console.error(new ServerError(error.stack));
+         |           ^
+      21 |   return { statusCode: 500, body: { error: 'Internal server error' } };
+      22 | };
+      23 |
+
+      at error (src/presentation/helpers/http-helper.ts:20:11)
+      at GetWorkOrderByIdController.handle (src/presentation/controllers/work-order/get-work-order-by-id-controller.ts:17:25)
+      at Object.<anonymous> (src/presentation/controllers/work-order/get-work-order-by-id-controller.spec.ts:38:20)
+
+PASS @fiap-13soat/work-order-service src/presentation/errors/errors.spec.ts
+PASS @fiap-13soat/work-order-service src/presentation/controllers/service/get-service-by-id-controller.spec.ts
+  ● Console
+
+    console.error
+      [not found] { name: 'NotFoundError' }
+
+      23 |
+      24 | export const notFound = (error: any): HttpResponse => {
+    > 25 |   console.error(error);
+         |           ^
+      26 |   return { statusCode: 404, body: { error: 'Resource not found' } };
+      27 | };
+      28 |
+
+      at error (src/presentation/helpers/http-helper.ts:25:11)
+      at GetServiceByIdController.handle (src/presentation/controllers/service/get-service-by-id-controller.ts:16:58)
+      at Object.<anonymous> (src/presentation/controllers/service/get-service-by-id-controller.spec.ts:32:20)
+
+    console.error
+      Error: err
+          at Object.<anonymous> (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/src/presentation/controllers/service/get-service-by-id-controller.spec.ts:38:61)
+          at Promise.finally.completed (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+          at _runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:497:12) {
+        name: 'ServerError'
+      }
+
+      18 |
+      19 | export const serverError = (error: any): HttpResponse => {
+    > 20 |   console.error(new ServerError(error.stack));
+         |           ^
+      21 |   return { statusCode: 500, body: { error: 'Internal server error' } };
+      22 | };
+      23 |
+
+      at error (src/presentation/helpers/http-helper.ts:20:11)
+      at GetServiceByIdController.handle (src/presentation/controllers/service/get-service-by-id-controller.ts:17:25)
+      at Object.<anonymous> (src/presentation/controllers/service/get-service-by-id-controller.spec.ts:39:20)
+
+PASS @fiap-13soat/work-order-service src/presentation/controllers/work-order/cancel-work-order-controller.spec.ts
+  ● Console
+
+    console.error
+      [WorkOrder] { name: 'NotFoundError' }
+
+      23 |
+      24 | export const notFound = (error: any): HttpResponse => {
+    > 25 |   console.error(error);
+         |           ^
+      26 |   return { statusCode: 404, body: { error: 'Resource not found' } };
+      27 | };
+      28 |
+
+      at error (src/presentation/helpers/http-helper.ts:25:11)
+      at CancelWorkOrderController.handle (src/presentation/controllers/work-order/cancel-work-order-controller.ts:16:58)
+      at Object.<anonymous> (src/presentation/controllers/work-order/cancel-work-order-controller.spec.ts:29:20)
+
+    console.error
+      Error: err
+          at Object.<anonymous> (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/src/presentation/controllers/work-order/cancel-work-order-controller.spec.ts:35:61)
+          at Promise.finally.completed (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+          at _runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:497:12) {
+        name: 'ServerError'
+      }
+
+      18 |
+      19 | export const serverError = (error: any): HttpResponse => {
+    > 20 |   console.error(new ServerError(error.stack));
+         |           ^
+      21 |   return { statusCode: 500, body: { error: 'Internal server error' } };
+      22 | };
+      23 |
+
+      at error (src/presentation/helpers/http-helper.ts:20:11)
+      at CancelWorkOrderController.handle (src/presentation/controllers/work-order/cancel-work-order-controller.ts:17:25)
+      at Object.<anonymous> (src/presentation/controllers/work-order/cancel-work-order-controller.spec.ts:36:20)
+
+PASS @fiap-13soat/work-order-service src/presentation/controllers/service/delete-service-controller.spec.ts
+  ● Console
+
+    console.error
+      [not found] { name: 'NotFoundError' }
+
+      23 |
+      24 | export const notFound = (error: any): HttpResponse => {
+    > 25 |   console.error(error);
+         |           ^
+      26 |   return { statusCode: 404, body: { error: 'Resource not found' } };
+      27 | };
+      28 |
+
+      at error (src/presentation/helpers/http-helper.ts:25:11)
+      at DeleteServiceController.handle (src/presentation/controllers/service/delete-service-controller.ts:16:58)
+      at Object.<anonymous> (src/presentation/controllers/service/delete-service-controller.spec.ts:29:20)
+
+    console.error
+      Error: err
+          at Object.<anonymous> (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/src/presentation/controllers/service/delete-service-controller.spec.ts:35:59)
+          at Promise.finally.completed (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+          at _runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:497:12) {
+        name: 'ServerError'
+      }
+
+      18 |
+      19 | export const serverError = (error: any): HttpResponse => {
+    > 20 |   console.error(new ServerError(error.stack));
+         |           ^
+      21 |   return { statusCode: 500, body: { error: 'Internal server error' } };
+      22 | };
+      23 |
+
+      at error (src/presentation/helpers/http-helper.ts:20:11)
+      at DeleteServiceController.handle (src/presentation/controllers/service/delete-service-controller.ts:17:25)
+      at Object.<anonymous> (src/presentation/controllers/service/delete-service-controller.spec.ts:36:20)
+
+PASS @fiap-13soat/work-order-service src/presentation/controllers/part-or-supply/delete-part-or-supply-controller.spec.ts
+  ● Console
+
+    console.error
+      [not found] { name: 'NotFoundError' }
+
+      23 |
+      24 | export const notFound = (error: any): HttpResponse => {
+    > 25 |   console.error(error);
+         |           ^
+      26 |   return { statusCode: 404, body: { error: 'Resource not found' } };
+      27 | };
+      28 |
+
+      at error (src/presentation/helpers/http-helper.ts:25:11)
+      at DeletePartOrSupplyController.handle (src/presentation/controllers/part-or-supply/delete-part-or-supply-controller.ts:16:58)
+      at Object.<anonymous> (src/presentation/controllers/part-or-supply/delete-part-or-supply-controller.spec.ts:29:20)
+
+    console.error
+      Error: err
+          at Object.<anonymous> (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/src/presentation/controllers/part-or-supply/delete-part-or-supply-controller.spec.ts:35:64)
+          at Promise.finally.completed (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+          at _runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:497:12) {
+        name: 'ServerError'
+      }
+
+      18 |
+      19 | export const serverError = (error: any): HttpResponse => {
+    > 20 |   console.error(new ServerError(error.stack));
+         |           ^
+      21 |   return { statusCode: 500, body: { error: 'Internal server error' } };
+      22 | };
+      23 |
+
+      at error (src/presentation/helpers/http-helper.ts:20:11)
+      at DeletePartOrSupplyController.handle (src/presentation/controllers/part-or-supply/delete-part-or-supply-controller.ts:17:25)
+      at Object.<anonymous> (src/presentation/controllers/part-or-supply/delete-part-or-supply-controller.spec.ts:36:20)
+
+PASS @fiap-13soat/work-order-service src/presentation/controllers/service/get-all-services-controller.spec.ts
+  ● Console
+
+    console.error
+      Error: err
+          at Object.<anonymous> (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/src/presentation/controllers/service/get-all-services-controller.spec.ts:33:60)
+          at Promise.finally.completed (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+          at _runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:497:12) {
+        name: 'ServerError'
+      }
+
+      18 |
+      19 | export const serverError = (error: any): HttpResponse => {
+    > 20 |   console.error(new ServerError(error.stack));
+         |           ^
+      21 |   return { statusCode: 500, body: { error: 'Internal server error' } };
+      22 | };
+      23 |
+
+      at error (src/presentation/helpers/http-helper.ts:20:11)
+      at GetAllServicesController.handle (src/presentation/controllers/service/get-all-services-controller.ts:20:25)
+      at Object.<anonymous> (src/presentation/controllers/service/get-all-services-controller.spec.ts:34:20)
+
+PASS @fiap-13soat/work-order-service src/application/use-cases/saga/db-get-saga-state.spec.ts
+PASS @fiap-13soat/work-order-service src/application/use-cases/work-order/db-update-work-order.spec.ts
+PASS @fiap-13soat/work-order-service src/presentation/controllers/work-order/delete-work-order-controller.spec.ts
+  ● Console
+
+    console.error
+      [not found] { name: 'NotFoundError' }
+
+      23 |
+      24 | export const notFound = (error: any): HttpResponse => {
+    > 25 |   console.error(error);
+         |           ^
+      26 |   return { statusCode: 404, body: { error: 'Resource not found' } };
+      27 | };
+      28 |
+
+      at error (src/presentation/helpers/http-helper.ts:25:11)
+      at DeleteWorkOrderController.handle (src/presentation/controllers/work-order/delete-work-order-controller.ts:16:58)
+      at Object.<anonymous> (src/presentation/controllers/work-order/delete-work-order-controller.spec.ts:28:20)
+
+    console.error
+      Error: err
+          at Object.<anonymous> (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/src/presentation/controllers/work-order/delete-work-order-controller.spec.ts:34:38)
+          at Promise.finally.completed (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+          at _runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/Users/victorlima/Development/TechChallenge/fiap-13soat-auto-repair-shop-work-order-service/node_modules/jest-runner/build/testWorker.js:497:12) {
+        name: 'ServerError'
+      }
+
+      18 |
+      19 | export const serverError = (error: any): HttpResponse => {
+    > 20 |   console.error(new ServerError(error.stack));
+         |           ^
+      21 |   return { statusCode: 500, body: { error: 'Internal server error' } };
+      22 | };
+      23 |
+
+      at error (src/presentation/helpers/http-helper.ts:20:11)
+      at DeleteWorkOrderController.handle (src/presentation/controllers/work-order/delete-work-order-controller.ts:17:25)
+      at Object.<anonymous> (src/presentation/controllers/work-order/delete-work-order-controller.spec.ts:35:20)
+
+PASS @fiap-13soat/work-order-service src/application/use-cases/part-or-supply/db-create-part-or-supply.spec.ts
+PASS @fiap-13soat/work-order-service src/application/use-cases/part-or-supply/db-get-all-parts-or-supplies.spec.ts
+PASS @fiap-13soat/work-order-service src/application/use-cases/work-order/db-get-work-order-by-id.spec.ts
+PASS @fiap-13soat/work-order-service src/application/use-cases/service/db-update-service.spec.ts
+PASS @fiap-13soat/work-order-service src/application/use-cases/work-order/db-get-all-work-orders.spec.ts
+PASS @fiap-13soat/work-order-service src/application/use-cases/part-or-supply/db-update-part-or-supply.spec.ts
+PASS @fiap-13soat/work-order-service src/application/use-cases/part-or-supply/db-get-part-or-supply-by-id.spec.ts
+PASS @fiap-13soat/work-order-service src/application/use-cases/service/db-get-all-services.spec.ts
+PASS @fiap-13soat/work-order-service src/application/use-cases/service/db-create-service.spec.ts
+PASS @fiap-13soat/work-order-service src/application/use-cases/work-order/db-delete-work-order.spec.ts
+PASS @fiap-13soat/work-order-service src/infra/messaging/sns-event-publisher.spec.ts
+PASS @fiap-13soat/work-order-service src/application/use-cases/service/db-delete-service.spec.ts
+PASS @fiap-13soat/work-order-service src/application/use-cases/service/db-get-service-by-id.spec.ts
+PASS @fiap-13soat/work-order-service src/application/use-cases/part-or-supply/db-delete-part-or-supply.spec.ts
+
+<--- Last few GCs --->
+ 0[54039:0xcaf800000]   581655 ms: Mark-Compact (reduce) 2047.6 (2078.3) -> 2046.7 (2078.6) MB, pooled: 0 MB, 93260.00 / 0.00 ms  (+ 89.2 ms in 0 steps since start of marking, biggest step 0.0 ms, walltime since start of marking 93612 ms) (average mu = 0.17[54039:0xcaf800000]   762765 ms: Mark-Compact (reduce) 2047.9 (2078.6) -> 2047.2 (2079.1) MB, pooled: 0 MB, 121570.62 / 0.00 ms  (+ 88.8 ms in 0 steps since start of marking, biggest step 0.0 ms, walltime since start of marking 122860 ms) (average mu = 0.
+
+<--- JS stacktrace --->
+
+FATAL ERROR: Reached heap limit Allocation failed - JavaScript heap out of memory
+----- Native stack trace -----
+
+ 1: 0x102da91fc node::OOMErrorHandler(char const*, v8::OOMDetails const&) [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+ 2: 0x102fd4864 v8::internal::V8::FatalProcessOutOfMemory(v8::internal::Isolate*, char const*, v8::OOMDetails const&) [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+ 3: 0x1031beb04 v8::internal::Heap::stack() [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+ 4: 0x1031bcf10 v8::internal::Heap::CollectGarbage(v8::internal::AllocationSpace, v8::internal::GarbageCollectionReason, v8::GCCallbackFlags) [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+ 5: 0x1031b1c4c v8::internal::HeapAllocator::AllocateRawWithLightRetrySlowPath(int, v8::internal::AllocationType, v8::internal::AllocationOrigin, v8::internal::AllocationAlignment) [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+ 6: 0x1031b2488 v8::internal::HeapAllocator::AllocateRawWithRetryOrFailSlowPath(int, v8::internal::AllocationType, v8::internal::AllocationOrigin, v8::internal::AllocationAlignment) [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+ 7: 0x103182854 v8::internal::FactoryBase<v8::internal::Factory>::NewFixedArray(int, v8::internal::AllocationType) [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+ 8: 0x103482d10 v8::internal::Object::CreateListFromArrayLike(v8::internal::Isolate*, v8::internal::Handle<v8::internal::Object>, v8::internal::ElementTypes) [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+ 9: 0x103598990 v8::internal::Runtime_CreateListFromArrayLike(int, unsigned long*, v8::internal::Isolate*) [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+10: 0x103a19af4 Builtins_CEntry_Return1_ArgvOnStack_NoBuiltinExit [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+11: 0x10397dba8 Builtins_CallWithArrayLike [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+12: 0x10ef6ad2c 
+13: 0x10ef62a00 
+14: 0x103981dc8 construct_stub_create_deopt_addr [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+15: 0x10ef6c02c 
+16: 0x1039c1290 Builtins_AsyncFunctionAwaitResolveClosure [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+17: 0x103a8c4d8 Builtins_PromiseFulfillReactionJob [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+18: 0x1039b1594 Builtins_RunMicrotasks [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+19: 0x103982af4 Builtins_JSRunMicrotasksEntry [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+20: 0x10311a848 v8::internal::(anonymous namespace)::Invoke(v8::internal::Isolate*, v8::internal::(anonymous namespace)::InvokeParams const&) [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+21: 0x10311b0ec v8::internal::(anonymous namespace)::InvokeWithTryCatch(v8::internal::Isolate*, v8::internal::(anonymous namespace)::InvokeParams const&) [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+22: 0x10311b224 v8::internal::Execution::TryRunMicrotasks(v8::internal::Isolate*, v8::internal::MicrotaskQueue*) [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+23: 0x103145dd0 v8::internal::MicrotaskQueue::RunMicrotasks(v8::internal::Isolate*) [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+24: 0x1031465b4 v8::internal::MicrotaskQueue::PerformCheckpoint(v8::Isolate*) [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+25: 0x103986f98 Builtins_CallApiCallbackGeneric [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+26: 0x103984ef0 Builtins_InterpreterEntryTrampoline [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+27: 0x103982c0c Builtins_JSEntryTrampoline [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+28: 0x1039828f4 Builtins_JSEntry [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+29: 0x10311a888 v8::internal::(anonymous namespace)::Invoke(v8::internal::Isolate*, v8::internal::(anonymous namespace)::InvokeParams const&) [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+30: 0x10311a1cc v8::internal::Execution::Call(v8::internal::Isolate*, v8::internal::Handle<v8::internal::Object>, v8::internal::Handle<v8::internal::Object>, int, v8::internal::Handle<v8::internal::Object>*) [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+31: 0x102feafec v8::Function::Call(v8::Local<v8::Context>, v8::Local<v8::Value>, int, v8::Local<v8::Value>*) [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+32: 0x102cc5a6c node::InternalCallbackScope::Close() [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+33: 0x102cc5cac node::InternalMakeCallback(node::Environment*, v8::Local<v8::Object>, v8::Local<v8::Object>, v8::Local<v8::Function>, int, v8::Local<v8::Value>*, node::async_context, v8::Local<v8::Value>) [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+34: 0x102cdaafc node::AsyncWrap::MakeCallback(v8::Local<v8::Function>, int, v8::Local<v8::Value>*) [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+35: 0x102eb5ed0 node::StreamBase::CallJSOnreadMethod(long, v8::Local<v8::ArrayBuffer>, unsigned long, node::StreamBase::StreamBaseJSChecks) [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+36: 0x102eb80d0 node::EmitToJSStreamListener::OnStreamRead(long, uv_buf_t const&) [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+37: 0x102ebc6cc node::LibuvStreamWrap::OnUvRead(long, uv_buf_t const*) [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+38: 0x102ebcdd4 node::LibuvStreamWrap::ReadStart()::$_1::__invoke(uv_stream_s*, long, uv_buf_t const*) [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+39: 0x10396e258 uv__stream_io [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+40: 0x103976454 uv__io_poll [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+41: 0x103962ff8 uv_run [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+42: 0x102cc64e4 node::SpinEventLoopInternal(node::Environment*) [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+43: 0x102df0790 node::NodeMainInstance::Run(node::ExitCode*, node::Environment*) [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+44: 0x102df052c node::NodeMainInstance::Run() [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+45: 0x102d66f88 node::Start(int, char**) [/Users/victorlima/.nvm/versions/node/v22.13.1/bin/node]
+46: 0x184a6bda4 start [/usr/lib/dyld]
+FAIL @fiap-13soat/work-order-service src/infra/messaging/sqs-event-consumer.spec.ts
+  ● Test suite failed to run
+
+    Jest worker ran out of memory and crashed
+
+      at ChildProcessWorker._onExit (node_modules/jest-worker/build/index.js:928:26)
+
+A worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due to improper teardown. Try running with --detectOpenHandles to find leaks. Active timers can also cause this, ensure that .unref() was called on them.
+------------------------------------------|---------|----------|---------|---------|-------------------
+File                                      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+------------------------------------------|---------|----------|---------|---------|-------------------
+All files                                 |   94.93 |    88.08 |   94.89 |   94.86 |                   
+ application/use-cases/part-or-supply     |     100 |      100 |     100 |     100 |                   
+  db-create-part-or-supply.ts             |     100 |      100 |     100 |     100 |                   
+  db-delete-part-or-supply.ts             |     100 |      100 |     100 |     100 |                   
+  db-get-all-parts-or-supplies.ts         |     100 |      100 |     100 |     100 |                   
+  db-get-part-or-supply-by-id.ts          |     100 |      100 |     100 |     100 |                   
+  db-update-part-or-supply.ts             |     100 |      100 |     100 |     100 |                   
+ application/use-cases/saga               |     100 |      100 |     100 |     100 |                   
+  db-get-saga-state.ts                    |     100 |      100 |     100 |     100 |                   
+  db-start-saga.ts                        |     100 |      100 |     100 |     100 |                   
+  db-update-saga-step.ts                  |     100 |      100 |     100 |     100 |                   
+ application/use-cases/service            |     100 |      100 |     100 |     100 |                   
+  db-create-service.ts                    |     100 |      100 |     100 |     100 |                   
+  db-delete-service.ts                    |     100 |      100 |     100 |     100 |                   
+  db-get-all-services.ts                  |     100 |      100 |     100 |     100 |                   
+  db-get-service-by-id.ts                 |     100 |      100 |     100 |     100 |                   
+  db-update-service.ts                    |     100 |      100 |     100 |     100 |                   
+ application/use-cases/work-order         |     100 |      100 |     100 |     100 |                   
+  db-approve-work-order.ts                |     100 |      100 |     100 |     100 |                   
+  db-cancel-work-order.ts                 |     100 |      100 |     100 |     100 |                   
+  db-create-work-order.ts                 |     100 |      100 |     100 |     100 |                   
+  db-delete-work-order.ts                 |     100 |      100 |     100 |     100 |                   
+  db-get-all-work-orders.ts               |     100 |      100 |     100 |     100 |                   
+  db-get-work-order-by-id.ts              |     100 |      100 |     100 |     100 |                   
+  db-update-work-order.ts                 |     100 |      100 |     100 |     100 |                   
+ domain/enums                             |     100 |      100 |     100 |     100 |                   
+  role-enum.ts                            |     100 |      100 |     100 |     100 |                   
+  saga-status-enum.ts                     |     100 |      100 |     100 |     100 |                   
+  status-enum.ts                          |     100 |      100 |     100 |     100 |                   
+ infra/db/mappers                         |     100 |      100 |     100 |     100 |                   
+  part-or-supply-mapper.ts                |     100 |      100 |     100 |     100 |                   
+  saga-state-mapper.ts                    |     100 |      100 |     100 |     100 |                   
+  service-mapper.ts                       |     100 |      100 |     100 |     100 |                   
+  work-order-mapper.ts                    |     100 |      100 |     100 |     100 |                   
+ infra/db/repositories                    |     100 |    86.95 |     100 |     100 |                   
+  prisma-part-or-supply-repository.ts     |     100 |       85 |     100 |     100 | 38-47             
+  prisma-saga-state-repository.ts         |     100 |      100 |     100 |     100 |                   
+  prisma-service-repository.ts            |     100 |    81.25 |     100 |     100 | 37-46             
+  prisma-work-order-repository.ts         |     100 |       88 |     100 |     100 | 81,85-95,176-177  
+ infra/messaging                          |   68.47 |    54.28 |   61.53 |   69.31 |                   
+  saga-event-handler.ts                   |   94.73 |    80.95 |     100 |   96.36 | 81-82             
+  sns-event-publisher.ts                  |     100 |      100 |     100 |     100 |                   
+  sqs-event-consumer.ts                   |       0 |        0 |       0 |       0 | 19-81             
+ presentation/controllers/part-or-supply  |     100 |      100 |     100 |     100 |                   
+  create-part-or-supply-controller.ts     |     100 |      100 |     100 |     100 |                   
+  delete-part-or-supply-controller.ts     |     100 |      100 |     100 |     100 |                   
+  get-all-parts-or-supplies-controller.ts |     100 |      100 |     100 |     100 |                   
+  get-part-or-supply-by-id-controller.ts  |     100 |      100 |     100 |     100 |                   
+  update-part-or-supply-controller.ts     |     100 |      100 |     100 |     100 |                   
+ presentation/controllers/service         |     100 |      100 |     100 |     100 |                   
+  create-service-controller.ts            |     100 |      100 |     100 |     100 |                   
+  delete-service-controller.ts            |     100 |      100 |     100 |     100 |                   
+  get-all-services-controller.ts          |     100 |      100 |     100 |     100 |                   
+  get-service-by-id-controller.ts         |     100 |      100 |     100 |     100 |                   
+  update-service-controller.ts            |     100 |      100 |     100 |     100 |                   
+ presentation/controllers/work-order      |     100 |      100 |     100 |     100 |                   
+  approve-work-order-controller.ts        |     100 |      100 |     100 |     100 |                   
+  cancel-work-order-controller.ts         |     100 |      100 |     100 |     100 |                   
+  create-work-order-controller.ts         |     100 |      100 |     100 |     100 |                   
+  delete-work-order-controller.ts         |     100 |      100 |     100 |     100 |                   
+  get-all-work-orders-controller.ts       |     100 |      100 |     100 |     100 |                   
+  get-work-order-by-id-controller.ts      |     100 |      100 |     100 |     100 |                   
+  update-work-order-controller.ts         |     100 |      100 |     100 |     100 |                   
+ presentation/errors                      |     100 |      100 |     100 |     100 |                   
+  access-denied-error.ts                  |     100 |      100 |     100 |     100 |                   
+  missing-param-error.ts                  |     100 |      100 |     100 |     100 |                   
+  not-found-error.ts                      |     100 |      100 |     100 |     100 |                   
+  server-error.ts                         |     100 |      100 |     100 |     100 |                   
+  unauthorized-error.ts                   |     100 |      100 |     100 |     100 |                   
+ presentation/helpers                     |   85.18 |      100 |      75 |     100 |                   
+  http-helper.ts                          |   85.18 |      100 |      75 |     100 |                   
+------------------------------------------|---------|----------|---------|---------|-------------------
+Summary of all failing tests
+FAIL src/infra/messaging/sqs-event-consumer.spec.ts
+  ● Test suite failed to run
+
+    Jest worker ran out of memory and crashed
+
+      at ChildProcessWorker._onExit (node_modules/jest-worker/build/index.js:928:26)
+
+
+Test Suites: 1 failed, 45 passed, 46 total
+Tests:       207 passed, 207 total
+Snapshots:   0 total
+Time:        766.38 s
+Ran all test suites.
+Force exiting Jest: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?
+|                   
+  http-helper.ts                          |   85.18 |      100 |      75 |     100 |                   
+------------------------------------------|---------|----------|---------|---------|-------------------
+Summary of all failing tests
+FAIL src/infra/messaging/sqs-event-consumer.spec.ts
+  ● Test suite failed to run
+
+    Jest worker ran out of memory and crashed
+
+      at ChildProcessWorker._onExit (node_modules/jest-worker/build/index.js:928:26)
+
+
+Test Suites: 1 failed, 45 passed, 46 total
+Tests:       207 passed, 207 total
+Snapshots:   0 total
+Time:        831.73 s
+Ran all test suites.
+Force exiting Jest: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?
