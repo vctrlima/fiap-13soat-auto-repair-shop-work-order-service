@@ -1,6 +1,7 @@
 import { EventConsumer } from "@/application/protocols/messaging";
 import { DomainEvent } from "@/domain/events";
 import {
+  logger,
   messageConsumedCounter,
   messageProcessingFailedCounter,
 } from "@/infra/observability";
@@ -70,9 +71,18 @@ export class SqsEventConsumer implements EventConsumer {
                 this.allowedTopicArns.length > 0 &&
                 !this.allowedTopicArns.includes(body.TopicArn)
               ) {
-                console.warn(
-                  `[SQS] Rejected message from unexpected topic: ${body.TopicArn}`,
+                logger.warn(
+                  { topicArn: body.TopicArn, queue: this.queueUrl },
+                  "Rejected message from unexpected topic",
                 );
+                if (message.ReceiptHandle) {
+                  await this.sqsClient.send(
+                    new DeleteMessageCommand({
+                      QueueUrl: this.queueUrl,
+                      ReceiptHandle: message.ReceiptHandle,
+                    }),
+                  );
+                }
                 continue;
               }
 
@@ -103,12 +113,18 @@ export class SqsEventConsumer implements EventConsumer {
               }
             } catch (error) {
               messageProcessingFailedCounter.add(1, { queue: this.queueUrl });
-              console.error("Error processing SQS message:", error);
+              logger.error(
+                { err: error, queue: this.queueUrl },
+                "Error processing SQS message",
+              );
             }
           }
         }
       } catch (error) {
-        console.error("Error polling SQS queue:", error);
+        logger.error(
+          { err: error, queue: this.queueUrl },
+          "Error polling SQS queue",
+        );
         if (this.running) {
           await new Promise((resolve) => setTimeout(resolve, 5000));
         }

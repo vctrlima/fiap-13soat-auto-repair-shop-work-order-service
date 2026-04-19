@@ -11,6 +11,7 @@ import {
   UpdateWorkOrder,
 } from "@/domain/use-cases";
 import {
+  logger,
   sagaCompensatedCounter,
   workOrderCompletedCounter,
 } from "@/infra/observability";
@@ -33,31 +34,49 @@ export class SagaEventHandler {
   ) {}
 
   async handle(event: DomainEvent): Promise<void> {
-    if (this.prisma) {
-      const existing = await this.prisma.processedEvent.findUnique({
+    if (!this.prisma) {
+      await this.processEvent(event);
+      return;
+    }
+
+    await this.prisma.$transaction(async (tx) => {
+      const existing = await tx.processedEvent.findUnique({
         where: { eventId: event.eventId },
       });
       if (existing) {
-        console.warn(`Duplicate event ignored: ${event.eventId}`);
+        logger.warn({ eventId: event.eventId }, "Duplicate event ignored");
         return;
       }
-    }
 
-    if (this.getSagaState && event.data?.workOrderId) {
-      const validStatuses = VALID_TRANSITIONS[event.eventType];
-      if (validStatuses) {
-        const sagaState = await this.getSagaState.getByWorkOrderId({
-          workOrderId: event.data.workOrderId,
-        });
-        if (sagaState && !validStatuses.includes(sagaState.status)) {
-          console.warn(
-            `Invalid transition: ${event.eventType} not allowed from ${sagaState.status}`,
-          );
-          return;
+      if (this.getSagaState && event.data?.workOrderId) {
+        const validStatuses = VALID_TRANSITIONS[event.eventType];
+        if (validStatuses) {
+          const sagaState = await this.getSagaState.getByWorkOrderId({
+            workOrderId: event.data.workOrderId,
+          });
+          if (sagaState && !validStatuses.includes(sagaState.status)) {
+            logger.warn(
+              {
+                eventType: event.eventType,
+                currentStatus: sagaState.status,
+                workOrderId: event.data.workOrderId,
+              },
+              "Invalid saga state transition",
+            );
+            return;
+          }
         }
       }
-    }
 
+      await this.processEvent(event);
+
+      await tx.processedEvent.create({
+        data: { eventId: event.eventId, eventType: event.eventType },
+      });
+    });
+  }
+
+  private async processEvent(event: DomainEvent): Promise<void> {
     switch (event.eventType) {
       case "PaymentCompleted":
         await this.handlePaymentCompleted(
@@ -78,13 +97,7 @@ export class SagaEventHandler {
         );
         break;
       default:
-        console.warn(`Unhandled event type: ${event.eventType}`);
-    }
-
-    if (this.prisma) {
-      await this.prisma.processedEvent.create({
-        data: { eventId: event.eventId, eventType: event.eventType },
-      });
+        logger.warn({ eventType: event.eventType }, "Unhandled event type");
     }
   }
 

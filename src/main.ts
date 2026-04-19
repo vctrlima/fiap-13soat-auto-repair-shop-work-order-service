@@ -9,6 +9,8 @@ import {
   SqsEventConsumer,
 } from "./infra/messaging";
 import { DlqMonitor } from "./infra/messaging/dlq-monitor";
+import { OutboxProcessor } from "./infra/messaging/outbox-processor";
+import { PrismaOutboxEventPublisher } from "./infra/messaging/prisma-outbox-event-publisher";
 import { SagaTimeoutJob } from "./infra/messaging/saga-timeout-job";
 import {
   correlationFields,
@@ -74,7 +76,8 @@ server.addHook("onResponse", async (request, reply) => {
 
 server.register(app);
 
-const eventPublisher = new SnsEventPublisher(
+const eventPublisher = new PrismaOutboxEventPublisher(prisma);
+const snsPublisher = new SnsEventPublisher(
   env.snsWorkOrderTopicArn,
   env.awsRegion,
   env.awsEndpoint,
@@ -114,6 +117,8 @@ const dlqMonitor = new DlqMonitor(
   env.awsEndpoint,
 );
 
+const outboxProcessor = new OutboxProcessor(prisma, snsPublisher);
+
 server.listen({ port, host }, (error) => {
   if (error) {
     server.log.error(error);
@@ -128,6 +133,7 @@ server.listen({ port, host }, (error) => {
       .then(() => console.log("[SQS] Execution consumer started"));
     sagaTimeoutJob.start();
     dlqMonitor.start();
+    outboxProcessor.start();
   }
 });
 
@@ -135,6 +141,7 @@ const shutdown = async () => {
   console.log("[SHUTDOWN] Stopping consumers...");
   sagaTimeoutJob.stop();
   dlqMonitor.stop();
+  outboxProcessor.stop();
   await paymentConsumer.stop();
   await executionConsumer.stop();
   await server.close();

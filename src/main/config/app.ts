@@ -40,9 +40,7 @@ export async function app(fastify: FastifyInstance, _opts: AppOptions) {
     credentials: true,
   });
 
-  if (env.jwtSecret) {
-    registerAuthHook(fastify, env.jwtSecret);
-  }
+  registerAuthHook(fastify, env.jwtSecret);
 
   fastify.setErrorHandler((error, request, reply) => {
     request.log.error({ err: error }, "Unhandled error");

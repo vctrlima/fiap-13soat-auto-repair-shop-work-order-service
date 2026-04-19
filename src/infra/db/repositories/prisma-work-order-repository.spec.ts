@@ -192,7 +192,7 @@ describe("PrismaWorkOrderRepository", () => {
       prisma.workOrder.update.mockResolvedValue(mockWorkOrderData);
       const result = await sut.update({
         id: "wo-1",
-        status: "APPROVED",
+        status: "IN_DIAGNOSIS",
       } as any);
       expect(result.id).toBe("wo-1");
     });

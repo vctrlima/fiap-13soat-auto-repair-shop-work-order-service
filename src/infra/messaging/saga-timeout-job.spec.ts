@@ -1,4 +1,15 @@
+jest.mock("@/infra/observability", () => ({
+  logger: {
+    info: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn(),
+    debug: jest.fn(),
+    child: jest.fn().mockReturnThis(),
+  },
+}));
+
 import { SagaTimeoutJob } from "@/infra/messaging/saga-timeout-job";
+import { logger as mockLogger } from "@/infra/observability";
 
 const mockFindMany = jest.fn();
 const mockSagaUpdate = jest.fn();
@@ -32,12 +43,10 @@ describe("SagaTimeoutJob", () => {
   });
 
   it("should start and stop the job", () => {
-    const logSpy = jest.spyOn(console, "log").mockImplementation();
     const job = new SagaTimeoutJob(makePrisma());
     job.start(60_000);
-    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining("Started"));
+    expect(mockLogger.info).toHaveBeenCalled();
     job.stop();
-    logSpy.mockRestore();
   });
 
   it("should handle stop when not started", () => {
@@ -47,12 +56,10 @@ describe("SagaTimeoutJob", () => {
 
   it("should do nothing when no stale sagas found", async () => {
     mockFindMany.mockResolvedValue([]);
-    const warnSpy = jest.spyOn(console, "warn").mockImplementation();
     const job = new SagaTimeoutJob(makePrisma());
     await job.checkTimeouts();
     expect(mockTransaction).not.toHaveBeenCalled();
-    expect(warnSpy).not.toHaveBeenCalled();
-    warnSpy.mockRestore();
+    expect(mockLogger.warn).not.toHaveBeenCalled();
   });
 
   it("should compensate stale sagas", async () => {
@@ -67,16 +74,12 @@ describe("SagaTimeoutJob", () => {
     mockFindMany.mockResolvedValue([staleSaga]);
 
     const prisma = makePrismaWithTransaction();
-    const warnSpy = jest.spyOn(console, "warn").mockImplementation();
 
     const job = new SagaTimeoutJob(prisma);
     await job.checkTimeouts();
 
     expect(mockTransaction).toHaveBeenCalled();
-    expect(warnSpy).toHaveBeenCalledWith(
-      expect.stringContaining("Compensated 1 timed-out sagas"),
-    );
-    warnSpy.mockRestore();
+    expect(mockLogger.warn).toHaveBeenCalled();
   });
 
   it("should handle null compensationHistory", async () => {
@@ -91,12 +94,10 @@ describe("SagaTimeoutJob", () => {
     mockFindMany.mockResolvedValue([staleSaga]);
 
     const prisma = makePrismaWithTransaction();
-    const warnSpy = jest.spyOn(console, "warn").mockImplementation();
 
     const job = new SagaTimeoutJob(prisma);
     await job.checkTimeouts();
 
     expect(mockTransaction).toHaveBeenCalled();
-    warnSpy.mockRestore();
   });
 });

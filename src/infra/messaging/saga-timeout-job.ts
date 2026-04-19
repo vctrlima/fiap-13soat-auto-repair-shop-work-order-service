@@ -1,3 +1,4 @@
+import { logger } from "@/infra/observability";
 import { PrismaClient, SagaStatus } from "@prisma/client";
 
 const TIMEOUT_MINUTES = 30;
@@ -16,11 +17,12 @@ export class SagaTimeoutJob {
   start(intervalMs = 60_000): void {
     this.intervalId = setInterval(() => {
       this.checkTimeouts().catch((err) =>
-        console.error("[SagaTimeout] Error checking timeouts:", err),
+        logger.error({ err }, "SagaTimeout check failed"),
       );
     }, intervalMs);
-    console.log(
-      `[SagaTimeout] Started — checking every ${intervalMs / 1000}s for sagas stale >${TIMEOUT_MINUTES}min`,
+    logger.info(
+      { intervalMs, timeoutMinutes: TIMEOUT_MINUTES },
+      "SagaTimeout started",
     );
   }
 
@@ -42,8 +44,9 @@ export class SagaTimeoutJob {
     });
 
     for (const saga of staleSagas) {
-      console.warn(
-        `[SagaTimeout] Saga ${saga.id} for workOrder ${saga.workOrderId} timed out in status ${saga.status}`,
+      logger.warn(
+        { sagaId: saga.id, workOrderId: saga.workOrderId, status: saga.status },
+        "Saga timed out",
       );
 
       const compensationHistory = (saga.compensationHistory as any[]) ?? [];
@@ -71,9 +74,7 @@ export class SagaTimeoutJob {
     }
 
     if (staleSagas.length > 0) {
-      console.warn(
-        `[SagaTimeout] Compensated ${staleSagas.length} timed-out sagas`,
-      );
+      logger.warn({ count: staleSagas.length }, "Compensated timed-out sagas");
     }
   }
 }

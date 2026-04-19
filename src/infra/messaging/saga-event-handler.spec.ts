@@ -1,6 +1,13 @@
 jest.mock("@/infra/observability", () => ({
   sagaCompensatedCounter: { add: jest.fn() },
   workOrderCompletedCounter: { add: jest.fn() },
+  logger: {
+    info: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn(),
+    debug: jest.fn(),
+    child: jest.fn().mockReturnThis(),
+  },
 }));
 
 import { EventPublisher } from "@/application/protocols/messaging";
@@ -142,29 +149,38 @@ describe("SagaEventHandler", () => {
   describe("Unknown event", () => {
     it("should log warning for unhandled event types", async () => {
       const { sut } = makeSut();
-      const warnSpy = jest.spyOn(console, "warn").mockImplementation();
       await sut.handle(makeEvent("UnknownEvent" as EventType, {}));
-      expect(warnSpy).toHaveBeenCalledWith(
-        "Unhandled event type: UnknownEvent",
+      const { logger } = jest.requireMock("@/infra/observability");
+      expect(logger.warn).toHaveBeenCalledWith(
+        expect.objectContaining({ eventType: "UnknownEvent" }),
+        expect.any(String),
       );
-      warnSpy.mockRestore();
     });
   });
 
   describe("Idempotency", () => {
+    const makeMockPrisma = (findUniqueImpl?: jest.Mock) => {
+      const processedEvent = {
+        findUnique: findUniqueImpl ?? jest.fn().mockResolvedValue(null),
+        create: jest.fn(),
+      };
+      return {
+        processedEvent,
+        $transaction: jest
+          .fn()
+          .mockImplementation((cb: any) => cb({ processedEvent })),
+      } as any;
+    };
+
     it("should ignore duplicate events with same eventId", async () => {
       const updateSagaStep = makeUpdateSagaStep();
       const updateWorkOrder = makeUpdateWorkOrder();
       const publisher = makePublisher();
-      const mockPrisma = {
-        processedEvent: {
-          findUnique: jest
-            .fn()
-            .mockResolvedValueOnce(null)
-            .mockResolvedValueOnce({ eventId: "evt-1" }),
-          create: jest.fn(),
-        },
-      } as any;
+      const findUnique = jest
+        .fn()
+        .mockResolvedValueOnce(null)
+        .mockResolvedValueOnce({ eventId: "evt-1" });
+      const mockPrisma = makeMockPrisma(findUnique);
       const sut = new SagaEventHandler(
         updateSagaStep,
         updateWorkOrder,
@@ -180,27 +196,47 @@ describe("SagaEventHandler", () => {
 
     it("should reject invalid state transition when getSagaState is provided", async () => {
       const getSagaState = makeGetSagaState();
-      const { sut, updateSagaStep } = makeSut(getSagaState);
+      const updateSagaStep = makeUpdateSagaStep();
+      const updateWorkOrder = makeUpdateWorkOrder();
+      const publisher = makePublisher();
+      const mockPrisma = makeMockPrisma();
       (getSagaState.getByWorkOrderId as jest.Mock).mockResolvedValue({
         workOrderId: "wo-1",
         status: SagaStatus.SagaCompleted,
       });
-      const warnSpy = jest.spyOn(console, "warn").mockImplementation();
+      const sut = new SagaEventHandler(
+        updateSagaStep,
+        updateWorkOrder,
+        publisher,
+        getSagaState,
+        mockPrisma,
+      );
       await sut.handle(makeEvent("PaymentCompleted", { workOrderId: "wo-1" }));
       expect(updateSagaStep.updateStep).not.toHaveBeenCalled();
-      expect(warnSpy).toHaveBeenCalledWith(
-        expect.stringContaining("Invalid transition"),
+      const { logger } = jest.requireMock("@/infra/observability");
+      expect(logger.warn).toHaveBeenCalledWith(
+        expect.objectContaining({ currentStatus: SagaStatus.SagaCompleted }),
+        expect.any(String),
       );
-      warnSpy.mockRestore();
     });
 
     it("should allow valid state transition", async () => {
       const getSagaState = makeGetSagaState();
-      const { sut, updateSagaStep } = makeSut(getSagaState);
+      const updateSagaStep = makeUpdateSagaStep();
+      const updateWorkOrder = makeUpdateWorkOrder();
+      const publisher = makePublisher();
+      const mockPrisma = makeMockPrisma();
       (getSagaState.getByWorkOrderId as jest.Mock).mockResolvedValue({
         workOrderId: "wo-1",
         status: SagaStatus.PaymentPending,
       });
+      const sut = new SagaEventHandler(
+        updateSagaStep,
+        updateWorkOrder,
+        publisher,
+        getSagaState,
+        mockPrisma,
+      );
       await sut.handle(makeEvent("PaymentCompleted", { workOrderId: "wo-1" }));
       expect(updateSagaStep.updateStep).toHaveBeenCalled();
     });

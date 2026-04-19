@@ -1,5 +1,5 @@
-import { Service } from '@/domain/entities';
-import { ServiceRepositoryType } from '@/infra/db/types';
+import { Service } from "@/domain/entities";
+import { ServiceRepositoryType } from "@/infra/db/types";
 
 export class ServiceMapper {
   static toDomain(data: ServiceRepositoryType): Service {
@@ -7,7 +7,7 @@ export class ServiceMapper {
       id: data.id,
       name: data.name,
       description: data.description,
-      price: data.price,
+      price: Number(data.price),
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
     };

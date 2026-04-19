@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma } from '@prisma/client';
+import { PrismaClient, Prisma } from "@prisma/client";
 import {
   CreateWorkOrderRepository,
   GetWorkOrderByIdRepository,
@@ -7,9 +7,22 @@ import {
   ApproveWorkOrderRepository,
   CancelWorkOrderRepository,
   DeleteWorkOrderRepository,
-} from '@/application/protocols/db';
-import { NotFoundError } from '@/presentation/errors';
-import { WorkOrderMapper } from '@/infra/db/mappers';
+} from "@/application/protocols/db";
+import { NotFoundError } from "@/presentation/errors";
+import { InvalidStatusTransitionError } from "@/presentation/errors/invalid-status-transition-error";
+import { WorkOrderMapper } from "@/infra/db/mappers";
+import { Status } from "@/domain/enums";
+
+const VALID_TRANSITIONS: Record<string, string[]> = {
+  [Status.Received]: [Status.InDiagnosis, Status.Canceled],
+  [Status.InDiagnosis]: [Status.WaitingApproval, Status.Canceled],
+  [Status.WaitingApproval]: [Status.Approved, Status.Canceled],
+  [Status.Approved]: [Status.InExecution, Status.Canceled],
+  [Status.InExecution]: [Status.Finished, Status.Canceled],
+  [Status.Finished]: [Status.Delivered, Status.Canceled],
+  [Status.Delivered]: [],
+  [Status.Canceled]: [],
+};
 
 const workOrderInclude = {
   services: { include: { service: true } },
@@ -28,12 +41,14 @@ export class PrismaWorkOrderRepository
 {
   constructor(private readonly prisma: PrismaClient) {}
 
-  async create(params: CreateWorkOrderRepository.Params): Promise<CreateWorkOrderRepository.Result> {
+  async create(
+    params: CreateWorkOrderRepository.Params,
+  ): Promise<CreateWorkOrderRepository.Result> {
     const data = await this.prisma.workOrder.create({
       data: {
         customerId: params.customerId,
         vehicleId: params.vehicleId,
-        status: (params.status as string as any) ?? 'RECEIVED',
+        status: (params.status as string as any) ?? "RECEIVED",
         services: {
           create: params.serviceIds.map((serviceId) => ({
             serviceId,
@@ -62,16 +77,21 @@ export class PrismaWorkOrderRepository
     return workOrder;
   }
 
-  async getById(params: GetWorkOrderByIdRepository.Params): Promise<GetWorkOrderByIdRepository.Result> {
+  async getById(
+    params: GetWorkOrderByIdRepository.Params,
+  ): Promise<GetWorkOrderByIdRepository.Result> {
     const data = await this.prisma.workOrder.findUnique({
       where: { id: params.id },
       include: workOrderInclude,
     });
-    if (!data) throw new NotFoundError(`WorkOrder with id ${params.id} not found`);
+    if (!data)
+      throw new NotFoundError(`WorkOrder with id ${params.id} not found`);
     return WorkOrderMapper.toDomain(data);
   }
 
-  async getAll(params: GetAllWorkOrdersRepository.Params): Promise<GetAllWorkOrdersRepository.Result> {
+  async getAll(
+    params: GetAllWorkOrdersRepository.Params,
+  ): Promise<GetAllWorkOrdersRepository.Result> {
     const where: Prisma.WorkOrderWhereInput = {};
     if (params.customerId) where.customerId = params.customerId;
     if (params.vehicleId) where.vehicleId = params.vehicleId;
@@ -92,7 +112,9 @@ export class PrismaWorkOrderRepository
         include: workOrderInclude,
         skip,
         take: limit,
-        orderBy: params.orderBy ? { [params.orderBy]: params.orderDirection ?? 'asc' } : { createdAt: 'desc' },
+        orderBy: params.orderBy
+          ? { [params.orderBy]: params.orderDirection ?? "asc" }
+          : { createdAt: "desc" },
       }),
       this.prisma.workOrder.count({ where }),
     ]);
@@ -106,9 +128,21 @@ export class PrismaWorkOrderRepository
     };
   }
 
-  async update(params: UpdateWorkOrderRepository.Params): Promise<UpdateWorkOrderRepository.Result> {
-    const existing = await this.prisma.workOrder.findUnique({ where: { id: params.id } });
-    if (!existing) throw new NotFoundError(`WorkOrder with id ${params.id} not found`);
+  async update(
+    params: UpdateWorkOrderRepository.Params,
+  ): Promise<UpdateWorkOrderRepository.Result> {
+    const existing = await this.prisma.workOrder.findUnique({
+      where: { id: params.id },
+    });
+    if (!existing)
+      throw new NotFoundError(`WorkOrder with id ${params.id} not found`);
+
+    if (params.status) {
+      const allowed = VALID_TRANSITIONS[existing.status] ?? [];
+      if (!allowed.includes(params.status)) {
+        throw new InvalidStatusTransitionError(existing.status, params.status);
+      }
+    }
 
     const updateData: Prisma.WorkOrderUpdateInput = {};
     if (params.status) updateData.status = params.status as string as any;
@@ -122,7 +156,9 @@ export class PrismaWorkOrderRepository
     if (params.partAndSupplyIds) {
       updateData.partsAndSupplies = {
         deleteMany: {},
-        create: params.partAndSupplyIds.map((partOrSupplyId) => ({ partOrSupplyId })),
+        create: params.partAndSupplyIds.map((partOrSupplyId) => ({
+          partOrSupplyId,
+        })),
       };
     }
 
@@ -133,7 +169,7 @@ export class PrismaWorkOrderRepository
     });
     const workOrder = WorkOrderMapper.toDomain(data);
     const budget = this.calculateBudget(workOrder);
-    if (budget !== data.budget) {
+    if (budget !== Number(data.budget)) {
       const updated = await this.prisma.workOrder.update({
         where: { id: data.id },
         data: { budget },
@@ -144,37 +180,62 @@ export class PrismaWorkOrderRepository
     return workOrder;
   }
 
-  async approve(params: ApproveWorkOrderRepository.Params): Promise<ApproveWorkOrderRepository.Result> {
-    const existing = await this.prisma.workOrder.findUnique({ where: { id: params.id } });
-    if (!existing) throw new NotFoundError(`WorkOrder with id ${params.id} not found`);
+  async approve(
+    params: ApproveWorkOrderRepository.Params,
+  ): Promise<ApproveWorkOrderRepository.Result> {
+    const existing = await this.prisma.workOrder.findUnique({
+      where: { id: params.id },
+    });
+    if (!existing)
+      throw new NotFoundError(`WorkOrder with id ${params.id} not found`);
     const data = await this.prisma.workOrder.update({
       where: { id: params.id },
-      data: { status: 'APPROVED' },
+      data: { status: "APPROVED" },
       include: workOrderInclude,
     });
     return WorkOrderMapper.toDomain(data);
   }
 
-  async cancel(params: CancelWorkOrderRepository.Params): Promise<CancelWorkOrderRepository.Result> {
-    const existing = await this.prisma.workOrder.findUnique({ where: { id: params.id } });
-    if (!existing) throw new NotFoundError(`WorkOrder with id ${params.id} not found`);
+  async cancel(
+    params: CancelWorkOrderRepository.Params,
+  ): Promise<CancelWorkOrderRepository.Result> {
+    const existing = await this.prisma.workOrder.findUnique({
+      where: { id: params.id },
+    });
+    if (!existing)
+      throw new NotFoundError(`WorkOrder with id ${params.id} not found`);
     const data = await this.prisma.workOrder.update({
       where: { id: params.id },
-      data: { status: 'CANCELED' },
+      data: { status: "CANCELED" },
       include: workOrderInclude,
     });
     return WorkOrderMapper.toDomain(data);
   }
 
   async delete(params: DeleteWorkOrderRepository.Params): Promise<void> {
-    const existing = await this.prisma.workOrder.findUnique({ where: { id: params.id } });
-    if (!existing) throw new NotFoundError(`WorkOrder with id ${params.id} not found`);
+    const existing = await this.prisma.workOrder.findUnique({
+      where: { id: params.id },
+    });
+    if (!existing)
+      throw new NotFoundError(`WorkOrder with id ${params.id} not found`);
     await this.prisma.workOrder.delete({ where: { id: params.id } });
   }
 
-  private calculateBudget(workOrder: { services: Array<{ service?: { price: number } | null; quantity: number }>; partsAndSupplies: Array<{ partOrSupply?: { price: number } | null; quantity: number }> }): number {
-    const serviceTotal = workOrder.services.reduce((acc, s) => acc + (s.service?.price ?? 0) * s.quantity, 0);
-    const partTotal = workOrder.partsAndSupplies.reduce((acc, p) => acc + (p.partOrSupply?.price ?? 0) * p.quantity, 0);
+  private calculateBudget(workOrder: {
+    services: Array<{ service?: { price: number } | null; quantity: number }>;
+    partsAndSupplies: Array<{
+      partOrSupply?: { price: number } | null;
+      quantity: number;
+    }>;
+  }): number {
+    const serviceTotal = workOrder.services.reduce(
+      (acc, s) => acc + (s.service?.price ?? 0) * s.quantity,
+      0,
+    );
+    const partTotal = workOrder.partsAndSupplies.reduce(
+      (acc, p) => acc + (p.partOrSupply?.price ?? 0) * p.quantity,
+      0,
+    );
     return serviceTotal + partTotal;
   }
 }

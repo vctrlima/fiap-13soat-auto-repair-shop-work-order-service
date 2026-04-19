@@ -1,6 +1,10 @@
-import { WorkOrder, WorkOrderService, WorkOrderPartOrSupply } from '@/domain/entities';
-import { Status } from '@/domain/enums';
-import { WorkOrderRepositoryType } from '@/infra/db/types';
+import {
+  WorkOrder,
+  WorkOrderService,
+  WorkOrderPartOrSupply,
+} from "@/domain/entities";
+import { Status } from "@/domain/enums";
+import { WorkOrderRepositoryType } from "@/infra/db/types";
 
 export class WorkOrderMapper {
   static toDomain(data: WorkOrderRepositoryType): WorkOrder {
@@ -9,7 +13,7 @@ export class WorkOrderMapper {
       customerId: data.customerId,
       vehicleId: data.vehicleId,
       status: data.status as unknown as Status,
-      budget: data.budget,
+      budget: Number(data.budget),
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
       services: data.services.map(
@@ -22,7 +26,7 @@ export class WorkOrderMapper {
                 id: s.service.id,
                 name: s.service.name,
                 description: s.service.description,
-                price: s.service.price,
+                price: Number(s.service.price),
                 createdAt: s.service.createdAt,
                 updatedAt: s.service.updatedAt,
               }
@@ -40,7 +44,7 @@ export class WorkOrderMapper {
                 id: p.partOrSupply.id,
                 name: p.partOrSupply.name,
                 description: p.partOrSupply.description,
-                price: p.partOrSupply.price,
+                price: Number(p.partOrSupply.price),
                 inStock: p.partOrSupply.inStock,
                 createdAt: p.partOrSupply.createdAt,
                 updatedAt: p.partOrSupply.updatedAt,
