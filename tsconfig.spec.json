@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "composite": true,
     "outDir": "out-tsc",
     "module": "nodenext",
     "types": ["jest", "node"],
