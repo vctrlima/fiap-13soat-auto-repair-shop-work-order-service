@@ -4,3 +4,4 @@ dist
 test-output
 coverage
 out-tsc
+src/generated

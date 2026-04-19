@@ -1,5 +1,5 @@
+import { PrismaClient, SagaStatus } from "@/generated/prisma/client";
 import { logger } from "@/infra/observability";
-import { PrismaClient, SagaStatus } from "@prisma/client";
 
 const TIMEOUT_MINUTES = 30;
 

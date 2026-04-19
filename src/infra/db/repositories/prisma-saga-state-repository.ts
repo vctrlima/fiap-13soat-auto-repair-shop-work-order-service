@@ -1,10 +1,10 @@
-import { PrismaClient } from '@prisma/client';
 import {
   CreateSagaStateRepository,
-  UpdateSagaStateRepository,
   GetSagaStateRepository,
+  UpdateSagaStateRepository,
 } from '@/application/protocols/db';
 import { SagaState } from '@/domain/entities';
+import { PrismaClient } from '@/generated/prisma/client';
 import { SagaStateMapper } from '@/infra/db/mappers';
 
 export class PrismaSagaStateRepository

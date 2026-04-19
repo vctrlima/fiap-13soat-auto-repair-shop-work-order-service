@@ -12,6 +12,7 @@ RUN yarn install --frozen-lockfile --network-timeout 300000
 
 COPY tsconfig*.json ./
 COPY eslint.config.mjs ./
+COPY prisma.config.ts ./
 COPY prisma ./prisma
 COPY src ./src
 
@@ -33,14 +34,11 @@ WORKDIR /app
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/yarn.lock ./
 
-RUN yarn install --production --frozen-lockfile --network-timeout 300000 && \
-    yarn add tsconfig-paths module-alias
+RUN yarn install --production --frozen-lockfile --network-timeout 300000
 
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
-COPY --from=builder /app/tsconfig*.json ./
+COPY --from=builder /app/prisma.config.ts ./
 
 COPY docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
@@ -55,4 +53,4 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
     CMD wget -qO- http://127.0.0.1:3002/health || exit 1
 
 ENTRYPOINT ["./docker-entrypoint.sh"]
-CMD ["node", "-r", "tsconfig-paths/register", "-r", "module-alias/register", "dist/main.js"]
+CMD ["node", "dist/main.js"]

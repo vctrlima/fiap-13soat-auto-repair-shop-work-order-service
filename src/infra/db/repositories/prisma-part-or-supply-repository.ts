@@ -1,13 +1,13 @@
-import { PrismaClient, Prisma } from '@prisma/client';
 import {
   CreatePartOrSupplyRepository,
-  GetPartOrSupplyByIdRepository,
-  GetAllPartsOrSuppliesRepository,
-  UpdatePartOrSupplyRepository,
   DeletePartOrSupplyRepository,
+  GetAllPartsOrSuppliesRepository,
+  GetPartOrSupplyByIdRepository,
+  UpdatePartOrSupplyRepository,
 } from '@/application/protocols/db';
-import { NotFoundError } from '@/presentation/errors';
+import { Prisma, PrismaClient } from '@/generated/prisma/client';
 import { PartOrSupplyMapper } from '@/infra/db/mappers';
+import { NotFoundError } from '@/presentation/errors';
 
 export class PrismaPartOrSupplyRepository
   implements

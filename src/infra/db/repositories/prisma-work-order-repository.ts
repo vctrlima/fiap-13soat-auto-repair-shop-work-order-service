@@ -1,17 +1,17 @@
-import { PrismaClient, Prisma } from "@prisma/client";
 import {
-  CreateWorkOrderRepository,
-  GetWorkOrderByIdRepository,
-  GetAllWorkOrdersRepository,
-  UpdateWorkOrderRepository,
   ApproveWorkOrderRepository,
   CancelWorkOrderRepository,
+  CreateWorkOrderRepository,
   DeleteWorkOrderRepository,
+  GetAllWorkOrdersRepository,
+  GetWorkOrderByIdRepository,
+  UpdateWorkOrderRepository,
 } from "@/application/protocols/db";
+import { Status } from "@/domain/enums";
+import { Prisma, PrismaClient } from "@/generated/prisma/client";
+import { WorkOrderMapper } from "@/infra/db/mappers";
 import { NotFoundError } from "@/presentation/errors";
 import { InvalidStatusTransitionError } from "@/presentation/errors/invalid-status-transition-error";
-import { WorkOrderMapper } from "@/infra/db/mappers";
-import { Status } from "@/domain/enums";
 
 const VALID_TRANSITIONS: Record<string, string[]> = {
   [Status.Received]: [Status.InDiagnosis, Status.Canceled],

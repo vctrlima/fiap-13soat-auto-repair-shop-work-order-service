@@ -1,5 +1,5 @@
+import { PrismaClient } from "@/generated/prisma/client";
 import { logger } from "@/infra/observability";
-import { PrismaClient } from "@prisma/client";
 import { SnsEventPublisher } from "./sns-event-publisher";
 
 export class OutboxProcessor {

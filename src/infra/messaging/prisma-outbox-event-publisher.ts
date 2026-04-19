@@ -1,7 +1,7 @@
 import { EventPublisher } from "@/application/protocols/messaging";
 import { DomainEvent } from "@/domain/events";
 import { messagePublishedCounter } from "@/infra/observability";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@/generated/prisma/client";
 
 /**
  * Writes events to the outbox table instead of publishing directly to SNS.

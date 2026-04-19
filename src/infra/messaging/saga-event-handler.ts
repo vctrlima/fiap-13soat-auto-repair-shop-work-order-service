@@ -10,12 +10,12 @@ import {
   UpdateSagaStep,
   UpdateWorkOrder,
 } from "@/domain/use-cases";
+import { PrismaClient } from "@/generated/prisma/client";
 import {
   logger,
   sagaCompensatedCounter,
   workOrderCompletedCounter,
 } from "@/infra/observability";
-import { PrismaClient } from "@prisma/client";
 
 const VALID_TRANSITIONS: Record<string, SagaStatus[]> = {
   PaymentCompleted: [SagaStatus.PaymentPending, SagaStatus.SagaStarted],

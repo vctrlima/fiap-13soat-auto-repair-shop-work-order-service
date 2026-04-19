@@ -13,6 +13,7 @@ module.exports = {
     ],
   },
   moduleNameMapper: {
+    "^(\\.\\.?/.*)\\.js$": "$1",
     "^@/(.*)$": "<rootDir>/src/$1",
   },
   coverageDirectory: "coverage",
@@ -28,6 +29,7 @@ module.exports = {
     "!src/infra/db/types/**",
     "!src/**/index.ts",
     "!src/infra/messaging/sqs-event-consumer.ts",
+    "!src/generated/**",
   ],
   coverageThreshold: {
     global: {
