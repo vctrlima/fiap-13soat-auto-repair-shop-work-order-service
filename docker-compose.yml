@@ -42,7 +42,6 @@ services:
       DATABASE_URL: postgresql://postgres:admin@postgres:5432/work_order_db?schema=public
       SERVER_HOST: http://localhost:3002
       SERVER_PORT: 3002
-      CUSTOMER_SERVICE_URL: http://host.docker.internal:3001
       PASSWORD_HASH_SALT: 10
       NODE_ENV: production
       OTEL_ENABLED: "true"
