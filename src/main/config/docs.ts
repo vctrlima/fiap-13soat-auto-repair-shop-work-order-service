@@ -15,5 +15,16 @@ export const docs: FastifyDynamicSwaggerOptions = {
       { name: 'part-or-supply', description: 'Part/Supply catalog end-points' },
       { name: 'saga', description: 'Saga state end-points' },
     ],
+    security: [{ bearerAuth: [] }],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+          description: 'JWT token obtained from POST /api/auth/cpf (customer) or POST /api/auth/login (admin)',
+        },
+      },
+    },
   },
 };
