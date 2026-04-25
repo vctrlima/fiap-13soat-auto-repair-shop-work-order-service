@@ -18,12 +18,31 @@ pool.on("error", (err) => {
 });
 
 const originalConnect = pool.connect.bind(pool);
-(pool as any).connect = async () => {
-  const client = await databaseCircuitBreaker.execute(() => originalConnect());
-  const originalQuery = client.query.bind(client);
-  (client as any).query = (...args: any[]) =>
-    databaseCircuitBreaker.execute(() => (originalQuery as any)(...args));
-  return client;
+(pool as any).connect = function (
+  callback?: (
+    err: Error | null,
+    client: any,
+    release: (err?: Error) => void,
+  ) => void,
+) {
+  const promise = (async () => {
+    const client = await databaseCircuitBreaker.execute(() =>
+      originalConnect(),
+    );
+    const originalQuery = client.query.bind(client);
+    (client as any).query = (...args: any[]) =>
+      databaseCircuitBreaker.execute(() => (originalQuery as any)(...args));
+    return client;
+  })();
+
+  if (typeof callback === "function") {
+    promise.then(
+      (client) => callback(null, client, client.release.bind(client)),
+      (err) => callback(err as Error, null as any, () => {}),
+    );
+    return undefined;
+  }
+  return promise;
 };
 
 const adapter = new PrismaPg(pool);
