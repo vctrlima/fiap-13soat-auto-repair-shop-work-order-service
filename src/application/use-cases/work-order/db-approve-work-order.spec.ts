@@ -1,18 +1,21 @@
 import { DbApproveWorkOrder } from '@/application/use-cases/work-order/db-approve-work-order';
 import { ApproveWorkOrderRepository } from '@/application/protocols/db';
 import { EventPublisher } from '@/application/protocols/messaging';
+import { StartSaga } from '@/domain/use-cases';
 
 const makeRepository = (): ApproveWorkOrderRepository => ({ approve: jest.fn() });
 const makePublisher = (): EventPublisher => ({ publish: jest.fn() });
+const makeStartSaga = (): StartSaga => ({ start: jest.fn() });
 const makeSut = () => {
   const repository = makeRepository();
   const publisher = makePublisher();
-  const sut = new DbApproveWorkOrder(repository, publisher);
-  return { sut, repository, publisher };
+  const startSaga = makeStartSaga();
+  const sut = new DbApproveWorkOrder(repository, publisher, startSaga);
+  return { sut, repository, publisher, startSaga };
 };
 
 describe('DbApproveWorkOrder', () => {
-  const mockResult = { id: 'wo-1', customerId: 'c-1', vehicleId: 'v-1', budget: 100, status: 'APPROVED', createdAt: new Date(), updatedAt: new Date() };
+  const mockResult = { id: 'wo-1', customerId: 'c-1', vehicleId: 'v-1', budget: 100, status: 'APPROVED', createdAt: new Date(), updatedAt: new Date(), services: [], partsAndSupplies: [] };
 
   it('should call repository with correct params', async () => {
     const { sut, repository } = makeSut();

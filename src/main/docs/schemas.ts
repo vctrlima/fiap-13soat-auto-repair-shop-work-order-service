@@ -45,7 +45,19 @@ export const sagaStateResponseSchema = {
     workOrderId: { type: 'string', format: 'uuid' },
     status: { type: 'string' },
     currentStep: { type: 'string' },
-    compensationHistory: { type: 'array', items: { type: 'object' } },
+    compensationHistory: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          step: { type: 'string' },
+          status: { type: 'string' },
+          timestamp: { type: 'string' },
+          reason: { type: 'string' },
+        },
+        additionalProperties: true,
+      },
+    },
     createdAt: { type: 'string', format: 'date-time' },
     updatedAt: { type: 'string', format: 'date-time', nullable: true },
   },

@@ -31,6 +31,9 @@ const envSchema = z.object({
     .default(
       "http://localhost:4566/000000000000/work-order-execution-queue-dlq",
     ),
+  CUSTOMER_SERVICE_URL: z
+    .string()
+    .default("http://localhost:3001"),
   CORS_ORIGIN: z.string().optional(),
   JWT_ACCESS_TOKEN_SECRET: z.string({
     error: "JWT_ACCESS_TOKEN_SECRET is required. Auth cannot be disabled.",
@@ -52,5 +55,6 @@ export default {
   sqsPaymentDlqUrl: parsed.SQS_PAYMENT_DLQ_URL,
   sqsExecutionDlqUrl: parsed.SQS_EXECUTION_DLQ_URL,
   corsOrigin: parsed.CORS_ORIGIN,
+  customerServiceUrl: parsed.CUSTOMER_SERVICE_URL,
   jwtSecret: parsed.JWT_ACCESS_TOKEN_SECRET,
 };
