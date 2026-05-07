@@ -2,6 +2,12 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import jwt from "jsonwebtoken";
 
 const PUBLIC_PATHS = ["/health", "/docs"];
+const CUSTOMER_WRITE_PATHS = [
+  "/api/work-orders",
+  "/api/executions",
+  "/api/payments",
+];
+const WRITE_METHODS = new Set(["POST", "PUT", "PATCH", "DELETE"]);
 
 export function registerAuthHook(
   fastify: FastifyInstance,
@@ -33,6 +39,17 @@ export function registerAuthHook(
           audience: "auto-repair-shop-api",
         }) as jwt.JwtPayload;
         (request as any).user = decoded;
+
+        if (
+          WRITE_METHODS.has(request.method) &&
+          decoded["type"] !== "admin" &&
+          !CUSTOMER_WRITE_PATHS.some((p) => url.startsWith(p))
+        ) {
+          reply
+            .status(403)
+            .send({ error: "Admin privileges required for this operation" });
+          return;
+        }
       } catch {
         reply.status(401).send({ error: "Invalid or expired token" });
         return;
